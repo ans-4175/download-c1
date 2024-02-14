@@ -1,0 +1,8 @@
+{
+    "dev": {
+        "driver": "sqlite3",
+        "filename": {
+            "ENV": "SQLITE_DB_PATH"
+        }
+    }
+}

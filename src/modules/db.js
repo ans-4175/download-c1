@@ -1,6 +1,6 @@
-import { open } from "sqlite";
-import sqlite3 from "sqlite3";
-import "dotenv/config";
+const { open } = require("sqlite");
+const sqlite3 = require("sqlite3");
+require("dotenv").config();
 
 async function ready() {
   const db = await open({
@@ -9,4 +9,4 @@ async function ready() {
   });
   return db;
 }
-export const isReady = ready();
+module.exports = { isReady: ready() };

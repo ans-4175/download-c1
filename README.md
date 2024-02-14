@@ -24,4 +24,5 @@ Download C1 dari KPU untuk dikumpulkan dan dipetakan
     - kode wilayah kelurahan
     - kode wilayan tps
     - foto c1 uri (nullable)
+    - created_at (date)
     - last_updated (date, nullable)
