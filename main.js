@@ -10,30 +10,55 @@ const generateTpsUrl = (code) => {
   const sanitizedCode = code.replace(/\./g, '');
   return `https://sirekap-obj-data.kpu.go.id/pemilu/hhcw/ppwp/${sanitizedCode.substring(0,2)}/${sanitizedCode.substring(0,4)}/${sanitizedCode.substring(0,6)}/${sanitizedCode.substring(0,10)}/${sanitizedCode}.json`
 }
-
 const downloadWilayah = async (url) => {
     const resp = await axios.get(url)
     return resp.data.map((tps) => { return tps.kode});
 }
 
+const procWilayah = async (wilayah) => {
+    wilayah.forEach(async (wil) => {
+        
+    })
+    const result = await wilayah.reduce(async (previousTask, wil) => {
+        await previousTask;
+        const wilUrl = generateWilUrl(wil);
+        const tps = await downloadWilayah(wilUrl);
+        const processTask = tps.map(async (tp) => {
+            const tpsUrl = generateTpsUrl(tp);
+            const resp = await axios.get(tpsUrl);
+            const images = resp.data.images;
+            const c1Image = images[1];
+            return downloadTpsC1({ code: tp, url: c1Image });
+            // const respImage = await downloadTpsC1({ code: tp, url: c1Image });
+            // console.log(respImage)
+        });
+        return processTask;
+    }, Promise.resolve());
+
+    return result;
+}
 
 
 // MAIN TEST
 const main = async () => {
-  const wilayah = [kodeWilayah[0], kodeWilayah[100]]
+    // TODO: change to handle all wilayah with sqlite
+//   const wilayah = [kodeWilayah[0], kodeWilayah[100]]
+  const wilayah = kodeWilayah;
+  const batchSize = 10;
+  const delay = 1000;
+  let iBatch = 0;
 
-  wilayah.forEach(async (wil) => {
-    // iterate per tps
-    const wilUrl = generateWilUrl(wil);
-    const tps = await downloadWilayah(wilUrl);
-    tps.forEach(async (tp) => {
-      const tpsUrl = generateTpsUrl(tp);
-      const resp = await axios.get(tpsUrl);
-      const images = resp.data.images;
-      const c1Image = images[1];
-      const respImage = await downloadTpsC1({ code: tp, url: c1Image });
-      console.log(respImage)
-    })
-  });
+  async function executeBatch() {
+      const batch = wilayah.slice(iBatch, iBatch + batchSize);
+      console.log(iBatch, batch);
+      const res = await procWilayah(batch);
+      iBatch += batchSize;
+
+      if (iBatch < wilayah.length) {
+          setTimeout(executeBatch, delay);
+      }
+  }
+
+  executeBatch();
 }
 main();
