@@ -93,7 +93,10 @@ const downloadTpsC1 = async (obj) => {
             responseType: 'stream',
         }).then(async (response) => {
             const image = await downloadImage(response, pathToSaveImage)
-            const driveId = await uploadImage(response, pathToSaveImage, filename);
+            let driveId = null;
+            if (fs.existsSync(servicePath)) {   //test if service account exist
+                driveId = await uploadImage(response, pathToSaveImage, filename);
+            }
             return resolve({
                 meta: { province, regency, district, village, tps: tp },
                 filename,
