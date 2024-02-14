@@ -16,9 +16,6 @@ const downloadWilayah = async (url) => {
 }
 
 const procWilayah = async (wilayah) => {
-    wilayah.forEach(async (wil) => {
-        
-    })
     const result = await wilayah.reduce(async (previousTask, wil) => {
         await previousTask;
         const wilUrl = generateWilUrl(wil);
