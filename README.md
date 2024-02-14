@@ -6,15 +6,17 @@ Download C1 dari KPU untuk dikumpulkan dan dipetakan
 
 1. downloader image c1 halaman 2 per tps [done]
 
-   a. format file id1_id2_id3_id4_idtps.json - resumable berdasarkan state sqlite
+   a. format file id1_id2_id3_id4_idtps.json - resumable berdasarkan state sqlite [-]
 
 2. mapping tps vs c1 nya uda ada apa blm
 
-   a. make sqlite
+   a. make sqlite [done]
 
 3. nyiapin kode wilayah hasil pemekaran [done]
 
-   a. papua
+   a. papua [not done]
+
+4. upload to gdrive [done]
 
 ## Sqlite table
 
