@@ -54,7 +54,9 @@ const procWilayah = async (wilayah) => {
         await previousTask;
         const wilUrl = generateWilUrl(wil);
         const tps = await downloadWilayah(wilUrl);
-        const processTask = executeBatches(tps, 5, 2000, procTps);
+        const batchSize = 3;
+        const delay = 3000;
+        const processTask = executeBatches(tps, batchSize, delay, procTps);
         return processTask;
     }, Promise.resolve());
 
@@ -70,8 +72,8 @@ const main = async () => {
     });
     // const wilayah = [kodeWilayah[0], kodeWilayah[100]]
     // const wilayah = kodeWilayah;
-    const batchSize = 10;
-    const delay = 1000;
+    const batchSize = 3;
+    const delay = 10000;
     executeBatches(wilayah, batchSize, delay, procWilayah);
 }
 main();

@@ -84,7 +84,8 @@ const downloadTpsC1 = async (obj) => {
         const regency = tp.substring(0, 4);
         const district = tp.substring(0, 6);
         const village = tp.substring(0, 10);
-        const filename = `${province}_${regency}_${district}_${village}_${tp}.jpg`;
+        const filename = `${tp}.jpg`;
+        // const filename = `${province}_${regency}_${district}_${village}_${tp}.jpg`;
         const pathToSaveImage = path.resolve(__dirname, '..', '..', 'image-c1', filename);
 
         axios({
