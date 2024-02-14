@@ -1,2 +1,22 @@
 # download-c1
+
 Download C1 dari KPU untuk dikumpulkan dan dipetakan
+
+## Tasks
+
+1. downloader image c1 halaman 2 per tps
+   a. format file id1_id2_id3_id4_idtps.json - resumable berdasarkan state sqlite
+2. mapping tps vs c1 nya uda ada apa blm
+   a. make sqlite
+3. nyiapin kode wilayah hasil pemekaran
+   a. papua
+
+## Sqlite table
+
+    - provinsi
+    - kota/kabupaten
+    - kecamatan
+    - kode wilayah kelurahan
+    - kode wilayan tps
+    - foto c1 uri (nullable)
+    - last_updated (date, nullable)
