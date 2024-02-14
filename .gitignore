@@ -129,6 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 package-lock.json
+.DS_Store
 
 image-c1/
 kodewilayah.js
+service-account.json

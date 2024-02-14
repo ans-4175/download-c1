@@ -48,7 +48,9 @@ const main = async () => {
   async function executeBatch() {
       const batch = wilayah.slice(iBatch, iBatch + batchSize);
       console.log(iBatch, batch);
-      const res = await procWilayah(batch);
+      const pBatch = await procWilayah(batch);
+      const batchResult = await Promise.all(pBatch);
+      console.log(iBatch, batchResult);
       iBatch += batchSize;
 
       if (iBatch < wilayah.length) {
