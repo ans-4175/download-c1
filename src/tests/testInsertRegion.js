@@ -1,5 +1,5 @@
-const { isReady } = require("../src/modules/db");
-const InsertRegion = require("../src/repositories/InsertRegion");
+const { isReady } = require("../modules/db");
+const InsertRegion = require("../repositories/InsertRegion");
 
 async function TestInsertRegion() {
   await InsertRegion("1", "2", "3", "4", "5");
