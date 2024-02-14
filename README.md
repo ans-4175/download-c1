@@ -4,7 +4,7 @@ Download C1 dari KPU untuk dikumpulkan dan dipetakan
 
 ## Tasks
 
-1. downloader image c1 halaman 2 per tps
+1. downloader image c1 halaman 2 per tps [done]
 
    a. format file id1_id2_id3_id4_idtps.json - resumable berdasarkan state sqlite
 
@@ -12,7 +12,7 @@ Download C1 dari KPU untuk dikumpulkan dan dipetakan
 
    a. make sqlite
 
-3. nyiapin kode wilayah hasil pemekaran
+3. nyiapin kode wilayah hasil pemekaran [done]
 
    a. papua
 
