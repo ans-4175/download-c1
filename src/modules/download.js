@@ -2,6 +2,15 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
+const downloadImage = (response, pathToSaveImage) => {
+    return new Promise((resolve, reject) => {
+      const fileStream = fs.createWriteStream(pathToSaveImage);
+      const image = response.data.pipe(fileStream);
+      fileStream.on('finish', () => resolve(image));
+      fileStream.on('error', reject);
+    });
+  };
+
 const downloadTpsC1 = async (obj) => {
     const { code: tp, url } = obj;
     return new Promise((resolve, reject) => {
@@ -18,8 +27,8 @@ const downloadTpsC1 = async (obj) => {
             url,
             method: 'GET',
             responseType: 'stream',
-        }).then(response => {
-            const image = response.data.pipe(fs.createWriteStream(pathToSaveImage));
+        }).then(async (response) => {
+            const image = await downloadImage(response, pathToSaveImage);
             return resolve({
                 meta: { province, regency, district, village, tps: tp },
                 filename,
