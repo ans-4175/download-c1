@@ -35,10 +35,18 @@ async function BatchDownloadTpsC1() {
             c1Image
           );
           const { fileName, path, driveId } = result;
-          await UpdateTpsWithDownloadInformation(
+          const updateResult = await UpdateTpsWithDownloadInformation(
             regionId,
             c1Image,
             fileName,
+            driveId
+          );
+          console.log(
+            "Finish updating region",
+            region,
+            "with c1Image",
+            c1Image,
+            "and driveId",
             driveId
           );
         }
