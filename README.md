@@ -41,12 +41,9 @@ Beberapa hal yang perlu diperhatikan
    npm install
    or
    yarn
-4. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-5. Sesuaikan di `main.js`
+4. Sesuaikan di `main.js`
    Apabila ingin menjalankan secara sekali jalan, pilih `count` sekali batch, atau menjalankan secara kontinyu dengan `node-cron`
-6. Menjalankan aplikasi
+5. Menjalankan aplikasi
    ```sh
       node main.js
       or
