@@ -131,7 +131,7 @@ dist
 package-lock.json
 .DS_Store
 
-image-c1/*
+# image-c1/*
 kodewilayah.js
 wilayah.js
 old-main.js
