@@ -130,7 +130,7 @@ const downloadTpsC1 = async (obj) => {
           }
           return resolve({
             meta: { province, regency, district, village, tps: tp },
-            filename,
+            fileName: filename,
             path: image.path,
             driveId,
           });
