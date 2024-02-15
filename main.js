@@ -1,6 +1,11 @@
 const BatchDownloadTpsC1 = require('./src/runners/BatchDownloadTpsC1')
+const cron = require('node-cron');
 
-const main = async () => {
+cron.schedule('*/* * * * *', async () => {
+    // run every 5 minutes
     await BatchDownloadTpsC1(100);
-}
-main();
+});
+// const main = async () => {
+//     await BatchDownloadTpsC1(100);
+// }
+// main();
