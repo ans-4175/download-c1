@@ -5,8 +5,8 @@
 1. [Overview](#overview)
 2. [Opportunities](#opportunities)
 3. [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
 4. [Next Steps](#next-steps)
 5. [Contributing](#contributing)
 
@@ -17,6 +17,7 @@ Project ini bertujuan untuk mengarsipkan dan menyalin Data Gambar C1 yang ada, a
 ## Opportunities
 
 Adanya Data Gambar C1 ini bisa digunakan sebagai data pembanding untuk diolah lagi dengan verifikasi manual atau diperiksa ulang di sistem lain. Sedangkan untuk rekap dan scraper data angka dll-nya sendiri tersedia, seperti:
+
 - [Zakiego](https://x.com/zakiego/status/1757929590562103499?s=20)
 - [Andi Pangeran](https://x.com/A_Pangeran/status/1758022607721660754?s=20)
 
@@ -27,6 +28,7 @@ Sebagai awalan, sementara ini file yang penting ada di modul `BatchDownloadTpsC1
 ### Prerequisites
 
 Beberapa hal yang perlu diperhatikan
+
 - Jalankan `tar -xzf result.db.tar.gz` untuk extract data
 - memastikan sudah ada `result.db` dari ekstrak `result.db.tar.gz` sebagai database sqlite lokal mapping tps dan bisa diakses untuk melihat kondisi data terakhir
 - memastikan ada folder `image-c1` untuk menampung gambar unduhan
@@ -42,17 +44,38 @@ Beberapa hal yang perlu diperhatikan
    npm install
    or
    yarn
+   ```
 4. Sesuaikan di `main.js`
    Apabila ingin menjalankan secara sekali jalan, pilih `count` sekali batch, atau menjalankan secara kontinyu dengan `node-cron`
 5. Menjalankan aplikasi
+
    ```sh
-      node main.js
-      or
-      node -e 'require("./src/runners/BatchDownloadTpsC1")(100)'
+   node main.js [--iterative] [--province-code string] [--kota-kabupaten-code string]
+   ```
+
+   Masing-masing flag memiliki fungsi seperti ini
+
+   ```
+   Options:
+   --iterative                      Perform scraping from start to finish using pagination by incomplete tps.
+                                    If not specified, the program will perform a singular batched download
+                                    then exit
+   --province-code [string]         Province code to scrape, if any
+   --kota-kabupaten-code [string]   Kota kabupated code to scrape, if any
+   -h, --help                       display help for command
+   ```
+
+   or
+
+   ```
+   node -e 'require("./src/runners/BatchDownloadTpsC1")(100)'
+   ```
+
 6. Mengecek data gambar yang sudah diunduh di `image-c1` atau di folder GDrive
 7. Melakukan reset data apabila dibutuhkan
    ```sh
       node -e 'require("./src/runners/ResetTpsDownload")()'
+   ```
 
 ## Next Steps
 

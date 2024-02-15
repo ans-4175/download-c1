@@ -1,8 +1,13 @@
 const GetIncompleteTps = require("../repositories/GetIncompleteTps");
 const Throttle = require("../modules/Throttle");
-const { downloadTpsC1, flushFolderImageC1, isUploadDrive } = require("../modules/download");
+const {
+  downloadTpsC1,
+  flushFolderImageC1,
+  isUploadDrive,
+} = require("../modules/download");
 const axios = require("axios");
 const UpdateTpsWithDownloadInformation = require("../repositories/UpdateTpsWithDownloadInformation");
+const Either = require("../modules/Either");
 
 const generateTpsUrl = (code) => {
   const sanitizedCode = code.replace(/\./g, "");
@@ -15,11 +20,28 @@ const generateTpsUrl = (code) => {
   )}/${sanitizedCode.substring(0, 10)}/${sanitizedCode}.json`;
 };
 
-async function BatchDownloadTpsC1(count = 10, obj = {}) {
-  const { provinsiCode, kotaKabupatenCode } = obj;
-
-  const list = await GetIncompleteTps(count, { provinsiCode, kotaKabupatenCode });
+/**
+ * @description This function load incomplete tps, check if any of the tps-es has uploaded c1 form, then store them into appropriate location
+ * @param {number} count
+ * @param {string} provinsiCode
+ * @param {string} kotaKabupatenCode
+ * @param {number} offset
+ * @returns {Promise<{ count: number, uploadResult: { result?: any} | { error?: Error} | null}>}
+ */
+async function BatchDownloadTpsC1(
+  count = 10,
+  provinsiCode = null,
+  kotaKabupatenCode = null,
+  offset = 0
+) {
+  const list = await GetIncompleteTps(
+    count,
+    offset,
+    provinsiCode,
+    kotaKabupatenCode
+  );
   const throttler = new Throttle(100);
+  console.log("Found", list.length, "incomplete tps!");
   const prList = list.map(async (region) => {
     return await throttler.offer(async () => {
       try {
@@ -58,7 +80,19 @@ async function BatchDownloadTpsC1(count = 10, obj = {}) {
     });
   });
   await Promise.all(prList);
-  if (isUploadDrive) await flushFolderImageC1();
+  let uploadResult = null;
+  try {
+    const shouldUpload = await isUploadDrive();
+    if (shouldUpload) await flushFolderImageC1();
+    uploadResult = Either.Right(true);
+  } catch (e) {
+    uploadResult = Either.Left(e);
+  }
+
+  return {
+    count: list.length,
+    uploadResult,
+  };
 }
 
 module.exports = BatchDownloadTpsC1;
