@@ -157,4 +157,8 @@ const flushFolderImageC1 = async () => {
   }
 }
 
-module.exports = { downloadTpsC1, flushFolderImageC1 };
+const isUploadDrive = async () => {
+  return fs.existsSync(servicePath);
+};
+
+module.exports = { downloadTpsC1, flushFolderImageC1, isUploadDrive };
