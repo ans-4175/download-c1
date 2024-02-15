@@ -132,7 +132,10 @@ package-lock.json
 .DS_Store
 
 image-c1/*
+result.db
+service-account.json
+
+# unused testing file
 kodewilayah.js
 wilayah.js
 old-main.js
-service-account.json
