@@ -27,7 +27,7 @@ Sebagai awalan, sementara ini file yang penting ada di modul `BatchDownloadTpsC1
 ### Prerequisites
 
 Beberapa hal yang perlu diperhatikan
-- memastikan membuat `result.db` dari `result.db.tmpl` dengan melaukan copy-paste sebagai database sqlite lokal mapping tps dan bisa diakses untuk melihat kondisi data terakhir
+- memastikan membuat `result.db` dari ekstrak `result.db.tar.gz` sebagai database sqlite lokal mapping tps dan bisa diakses untuk melihat kondisi data terakhir
 - memastikan ada folder `image-c1` untuk menampung gambar unduhan
 - (opsional) apabila ingin disimpan di Google Drive dapat memanfaatkan GDrive API dengan otentikasi `./service-account.json` credential ditaruh di root folder repo, serta sebuah GDrive folder sudah yang diberi hak akses untuk email credential key-nya
 
