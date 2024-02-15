@@ -7,6 +7,12 @@ const { google } = require("googleapis");
 const { file } = require("googleapis/build/src/apis/file");
 const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
 const FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
+const imageDirectory = path.resolve(
+  __dirname,
+  "..",
+  "..",
+  process.env.IMAGE_FOLDER
+);
 
 class GoogleDriveService {
   constructor(secretPath, scopes) {
@@ -107,11 +113,8 @@ const downloadTpsC1 = async (obj) => {
     const village = tp.substring(0, 10);
     const filename = `${tp}.jpg`;
     // const filename = `${province}_${regency}_${district}_${village}_${tp}.jpg`;
-    const pathToSaveImage = path.resolve(
-      __dirname,
-      "..",
-      "..",
-      "image-c1",
+    const pathToSaveImage = path.join(
+      imageDirectory,
       filename
     );
 
@@ -145,4 +148,13 @@ const downloadTpsC1 = async (obj) => {
   });
 };
 
-module.exports = { downloadTpsC1 };
+const flushFolderImageC1 = async () => {
+  // Read the directory
+  const files = await fs.readdirSync(imageDirectory);
+  // Delete each file
+  for (const file of files) {
+    await fs.unlinkSync(path.join(imageDirectory, file));
+  }
+}
+
+module.exports = { downloadTpsC1, flushFolderImageC1 };

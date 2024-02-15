@@ -1,6 +1,6 @@
 const GetIncompleteTps = require("../repositories/GetIncompleteTps");
 const Throttle = require("../modules/Throttle");
-const { downloadTpsC1 } = require("../modules/download");
+const { downloadTpsC1, flushFolderImageC1 } = require("../modules/download");
 const axios = require("axios");
 const UpdateTpsWithDownloadInformation = require("../repositories/UpdateTpsWithDownloadInformation");
 
@@ -56,6 +56,7 @@ async function BatchDownloadTpsC1(count = 10) {
     });
   });
   await Promise.all(prList);
+  await flushFolderImageC1();
 }
 
 module.exports = BatchDownloadTpsC1;
