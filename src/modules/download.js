@@ -1,11 +1,12 @@
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+require("dotenv").config();
 
 const { google } = require("googleapis");
 const { file } = require("googleapis/build/src/apis/file");
 const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
-const FOLDER_ID = "1JGpDUdK09fwCSRKhcDROITTwNlTghGgM"; // FIXME: make this configurable same as service-account
+const FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 
 class GoogleDriveService {
   constructor(secretPath, scopes) {
