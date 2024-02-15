@@ -96,6 +96,7 @@ const uploadImage = async (response, pathToSaveImage, fileName) => {
  */
 const downloadTpsC1 = async (obj) => {
   const { code: tp, url } = obj;
+  console.log(obj);
   return new Promise((resolve, reject) => {
     if (!url) return resolve(null);
 
@@ -142,3 +143,5 @@ const downloadTpsC1 = async (obj) => {
       });
   });
 };
+
+module.exports = { downloadTpsC1 };

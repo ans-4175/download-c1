@@ -27,8 +27,13 @@ async function BatchDownloadTpsC1() {
         const resp = await axios.get(tpsUri);
         const images = resp.data.images;
         const c1Image = images[1];
+        console.log("Finish fetching c1Image with uri", c1Image);
         if (c1Image) {
           const result = await downloadTpsC1({ code: tpsCode, url: c1Image });
+          console.log(
+            "Finish downloading and uploading to gdrive for c1Image",
+            c1Image
+          );
           const { fileName, path, driveId } = result;
           await UpdateTpsWithDownloadInformation(
             regionId,
@@ -44,3 +49,5 @@ async function BatchDownloadTpsC1() {
   });
   await Promise.all(prList);
 }
+
+module.exports = BatchDownloadTpsC1;
