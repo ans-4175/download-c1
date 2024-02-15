@@ -29,7 +29,7 @@ Sebagai awalan, sementara ini file yang penting ada di modul `BatchDownloadTpsC1
 Beberapa hal yang perlu diperhatikan
 - memastikan ada `result.db` sebagai database sqlite lokal mapping tps dan bisa diakses untuk melihat kondisi data terakhir
 - memastikan ada folder `image-c1` untuk menampung gambar unduhan
-- (opsional) apabila ingin disimpan di Google Drive dapat memanfaatkan GDrive API dengan otentikasi `service-account.json` credential ditaruh di root repo, serta sebuah GDrive folder yang diberi hak akses
+- (opsional) apabila ingin disimpan di Google Drive dapat memanfaatkan GDrive API dengan otentikasi `./service-account.json` credential ditaruh di root folder repo, serta sebuah GDrive folder sudah yang diberi hak akses untuk email credential key-nya
 
 ### Installation
 
@@ -55,7 +55,11 @@ Project ini belum beres semuanya, diantaranya hal yang sudah terpikirkan
 
 - [ ] Batch continue tanpa berhenti menelusuri semua TPS null dengan backoff delay
 
-- [ ] Melakukan selektif fetch/batch dengan membaca KawalPemilu data TPS yang masih kosong untuk ditarik data C1-nya apabila sudah ada (berdasarkan kode area wilayah tps)
+- [ ] Reset tanda sudah di-download untuk semua atau kode tertentu
+
+- [x] Melakukan selektif fetch/batch berdasar kode Provinsi dan Kota
+
+- [ ] Melakukan selektif fetch/batch dengan membaca Data TPS KawalPemilu yang masih kosong untuk ditarik data C1-nya apabila sudah ada (berdasarkan kode area wilayah tps)
 
 ## Contributing
 

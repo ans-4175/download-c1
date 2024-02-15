@@ -153,6 +153,7 @@ const flushFolderImageC1 = async () => {
   const files = await fs.readdirSync(imageDirectory);
   // Delete each file
   for (const file of files) {
+    if (file === ".gitkeep") continue;
     await fs.unlinkSync(path.join(imageDirectory, file));
   }
 }

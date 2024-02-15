@@ -5,10 +5,18 @@ const { isReady } = require("../modules/db");
  * @param {number} count
  * @returns {Promise<Array<any>>}
  */
-async function GetIncompleteTps(count) {
+async function GetIncompleteTps(count, obj) {
+  const { provinsiCode, kotaKabupatenCode } = obj;
   const db = await isReady;
+  let whereStatement = `fileName IS NULL`;
+  if (provinsiCode) {
+    whereStatement += ` AND provinsiCode='${provinsiCode}'`;
+  }
+  if (kotaKabupatenCode) {
+    whereStatement += ` AND kotaKabupatenCode='${kotaKabupatenCode}'`;
+  }
   const list = await db.all(
-    `SELECT * FROM tps_c1_download_result WHERE fileName IS NULL LIMIT ${count} OFFSET 0`
+    `SELECT * FROM tps_c1_download_result WHERE ${whereStatement} LIMIT ${count} OFFSET 0`
   );
   return list;
 }
