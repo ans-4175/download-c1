@@ -55,7 +55,7 @@ const procWilayah = async (wilayah) => {
         const wilUrl = generateWilUrl(wil);
         const tps = await downloadWilayah(wilUrl);
         const batchSize = 3;
-        const delay = 3000;
+        const delay = 10000;
         const processTask = executeBatches(tps, batchSize, delay, procTps);
         return processTask;
     }, Promise.resolve());
@@ -66,7 +66,7 @@ const procWilayah = async (wilayah) => {
 // MAIN TEST
 const main = async () => {
     // TODO: change to handle all wilayah with sqlite
-    const patternBdg = /^32\.73\..*$/;
+    const patternBdg = /^32\.73\.24\..*$/;
     const wilayah = kodeWilayah.filter((wil) => {
         return wil.match(patternBdg);
     });
