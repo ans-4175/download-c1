@@ -48,7 +48,8 @@ Beberapa hal yang perlu diperhatikan
       node main.js
       or
       node -e 'require("./src/runners/BatchDownloadTpsC1")(100)'
-6. Melakukan reset data apabila dibutuhkan
+6. Mengecek data gambar yang sudah diunduh di `image-c1` atau di folder GDrive
+7. Melakukan reset data apabila dibutuhkan
    ```sh
       node -e 'require("./src/runners/ResetTpsDownload")()'
 
