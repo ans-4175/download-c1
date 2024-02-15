@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const { google } = require("googleapis");
+const { file } = require("googleapis/build/src/apis/file");
 const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
 const FOLDER_ID = "1JGpDUdK09fwCSRKhcDROITTwNlTghGgM"; // FIXME: make this configurable same as service-account
 
@@ -26,6 +27,15 @@ class GoogleDriveService {
 const driveClient = new GoogleDriveService(servicePath, [
   "https://www.googleapis.com/auth/drive",
 ]).getClient();
+
+const checkFile = async (fileName) => {
+  const res = await driveClient.files.list({
+    q: `name='${fileName}' and '${FOLDER_ID}' in parents`,
+    fields: "files(id, name)",
+  });
+
+  return res.data.files.length > 0;
+};
 
 const downloadImage = (response, pathToSaveImage) => {
   return new Promise((resolve, reject) => {
@@ -103,6 +113,7 @@ const downloadTpsC1 = async (obj) => {
       filename
     );
 
+    // if (checkFile(filename)) return resolve({ meta: { province, regency, district, village, tps: tp }, filename, path: pathToSaveImage, driveId: null });
     axios({
       url,
       method: "GET",
@@ -131,5 +142,3 @@ const downloadTpsC1 = async (obj) => {
       });
   });
 };
-
-module.exports = { downloadTpsC1 };
