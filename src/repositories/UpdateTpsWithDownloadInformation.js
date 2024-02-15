@@ -15,15 +15,16 @@ async function UpdateTpsWithDownloadInformation(
   driveId
 ) {
   const db = await isReady;
+  const parameter = {
+    $fileName: fileName,
+    $uri: uri,
+    $updatedAt: new Date(),
+    $driveId: driveId,
+    $id: regionId,
+  };
   await db.run(
-    `UPDATE tps_c1_download_result SET fileName = $fileName, uri = $uri, updatedAt = $updateAt, driveId = $driveId WHERE id = $id`,
-    {
-      $fileName: fileName,
-      $uri: uri,
-      $updatedAt: new Date(),
-      $driveId: driveId,
-      $id: regionId,
-    }
+    `UPDATE tps_c1_download_result SET fileName = $fileName, uri = $uri, updatedAt = $updatedAt, driveId = $driveId WHERE id = $id`,
+    parameter
   );
 }
 
