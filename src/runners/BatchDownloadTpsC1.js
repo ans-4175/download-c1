@@ -15,8 +15,8 @@ const generateTpsUrl = (code) => {
   )}/${sanitizedCode.substring(0, 10)}/${sanitizedCode}.json`;
 };
 
-async function BatchDownloadTpsC1() {
-  const list = await GetIncompleteTps(10);
+async function BatchDownloadTpsC1(count = 10) {
+  const list = await GetIncompleteTps(count);
   const throttler = new Throttle(100);
   const prList = list.map(async (region) => {
     return await throttler.offer(async () => {
