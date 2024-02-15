@@ -15,6 +15,7 @@ const generateWilUrl = (code, tps = "001") => {
 async function PopulateRegionList() {
   const throttle = new Throttle(100);
   let count = 0;
+  // FIXME: change to populate using KPU API
   wilayahList.forEach(async (wilayahCode) => {
     throttle.offer(async () => {
       let ok = false;
