@@ -29,10 +29,7 @@ const main = async () => {
   if (!iterative) {
     const count = 10000; // number of TPS to download per batch finding incomplete
     console.log("Begin performing download..");
-    await BatchDownloadTpsC1(count, {
-      provinsiCode: provinceCode,
-      kotaKabupatenCode: kotaKabupatenCode,
-    });
+    await BatchDownloadTpsC1(count, provinceCode, kotaKabupatenCode);
   } else {
     console.log("Begin performing download iteratively..");
     await IterativelyDownloadTpsC1(provinceCode, kotaKabupatenCode);
