@@ -10,5 +10,5 @@ const Either = (left, right) => {
 
 module.exports = {
   Right: (result) => Either(null, result),
-  Left: (err) => Either(err),
+  Left: (err) => Either(err, null),
 };
