@@ -1,5 +1,6 @@
 require("dotenv").config();
 const AWS = require("aws-sdk");
+const UploadResult = require("./models/UploadResult");
 
 const endpoint = process.env.S3_ENDPOINT;
 const bucket = process.env.S3_BUCKET;
@@ -14,6 +15,12 @@ const s3 = new AWS.S3({
   },
 });
 
+/**
+ *
+ * @param {ReadableStream} readableStream
+ * @param {string} fileName
+ * @returns {Promise<UploadResult>}
+ */
 const uploadToS3 = async (readableStream, fileName) => {
   const param = {
     Bucket: bucket,
@@ -22,11 +29,8 @@ const uploadToS3 = async (readableStream, fileName) => {
   };
   return new Promise((resolve, reject) => {
     s3.upload(param, null, (err, data) => {
-      if (err) reject(err);
-      else
-        resolve({
-          location: data.Location,
-        });
+      if (err) resolve(UploadResult.error(err));
+      else resolve(UploadResult.success(data.Location));
     });
   });
 };
