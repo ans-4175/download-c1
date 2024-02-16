@@ -26,10 +26,9 @@ async function GetIncompleteTps(
     parameter["$kotaKabupatenCode"] = kotaKabupatenCode;
   }
   let realOffset = offset || 0;
-  const list = await db.all(
-    `SELECT * FROM tps_c1_download_result WHERE ${whereStatement} LIMIT ${count} OFFSET ${realOffset}`,
-    parameter
-  );
+  const query = `SELECT * FROM tps_c1_download_result WHERE ${whereStatement} LIMIT ${count} OFFSET ${realOffset}`;
+  console.log(query, parameter);
+  const list = await db.all(query, parameter);
   return list;
 }
 
