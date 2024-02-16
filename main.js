@@ -35,7 +35,16 @@ const main = async () => {
     });
   } else {
     console.log("Begin performing download iteratively..");
-    await IterativelyDownloadTpsC1(provinceCode, kotaKabupatenCode);
+    const result = await IterativelyDownloadTpsC1(
+      provinceCode,
+      kotaKabupatenCode
+    );
+    console.log("Finished performing iterative download!");
+    console.log(`
+      Total tps checked: ${result.count}
+      Error encountered: ${result.totalErrorEncountered}
+      Duration         : ${result.duration} millis
+    `);
   }
 };
 main();

@@ -4,13 +4,15 @@ const BatchDownloadTpsC1 = require("./BatchDownloadTpsC1");
 /**
  * @param {string} provinsiCode
  * @param {string} kotaKabupatenCode
- * @returns {Promise<any>}
+ * @returns {Promise<{count: number, totalErrorEncountered: number, duration: number}>}
  */
 async function IterativelyDownloadTpsC1(provinsiCode, kotaKabupatenCode) {
   let isFinished = false;
   const count = 100;
   let offset = 0;
-
+  let accumulatedProcessedTps = 0;
+  let totalErrorEncountered = 0;
+  const start = new Date();
   while (!isFinished) {
     try {
       console.log(
@@ -34,13 +36,25 @@ async function IterativelyDownloadTpsC1(provinsiCode, kotaKabupatenCode) {
         "Result",
         result.count
       );
+      accumulatedProcessedTps += result.count;
+      if (result.count < count) {
+        console.log("Finished scraping from tps!");
+        isFinished = true;
+      }
     } catch (e) {
       console.log("Error on fetching tps c1", e);
+      totalErrorEncountered += 1;
     } finally {
       offset += count;
     }
     await Sleep();
   }
+  const duration = new Date().getTime() - start.getTime();
+  return {
+    count: accumulatedProcessedTps,
+    errorCount: totalErrorEncountered,
+    duration: duration,
+  };
 }
 
 module.exports = IterativelyDownloadTpsC1;
