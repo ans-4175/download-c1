@@ -1,18 +1,28 @@
+require("dotenv").config();
+
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-require("dotenv").config();
-
-const { google } = require("googleapis");
-const { file } = require("googleapis/build/src/apis/file");
-const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
-const FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 const imageDirectory = path.resolve(
   __dirname,
   "..",
   "..",
   process.env.IMAGE_FOLDER
 );
+
+const { google } = require("googleapis");
+const { file } = require("googleapis/build/src/apis/file");
+const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
+const FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
+
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3({
+    endpoint: `${process.env.S3_ENDPOINT}/tps`,
+    credentials: {
+        accessKeyId: process.env.S3_KEYID,
+        secretAccessKey: process.env.S3_SECRETKEY,
+    },
+});
 
 class GoogleDriveService {
   constructor(secretPath, scopes) {
@@ -53,6 +63,30 @@ const downloadImage = (response, pathToSaveImage) => {
   });
 };
 
+const uploadImageS3 = async (response, pathToSaveImage, fileName) => {
+  return new Promise((resolve) => {
+    const params = {
+      Bucket: process.env.S3_BUCKET, // pass your bucket name
+      Key: fileName, //here is your file name
+      Body: fs.createReadStream(pathToSaveImage),
+    };
+
+    s3.upload(params, (s3Err, data) => {
+        if (s3Err) {
+            resolve({
+                success: false,
+                location: null,
+                error: s3Err,
+            });
+        } else {
+            resolve({
+                success: true,
+                location: data.Location,
+            });
+        }
+    });
+  })
+}
 const uploadImage = async (response, pathToSaveImage, fileName) => {
   const media = {
     mimeType: "image/jpeg",
@@ -128,9 +162,11 @@ const downloadTpsC1 = async (obj) => {
         try {
           const image = await downloadImage(response, pathToSaveImage);
           let driveId = null;
-          if (fs.existsSync(servicePath)) {
-            //test if service account exist
-            driveId = await uploadImage(response, pathToSaveImage, filename);
+          if (isUploadCloud()) {
+            //test if need to upload to cloud
+            // driveId = await uploadImage(response, pathToSaveImage, filename);
+            const upload = await uploadImageS3(response, pathToSaveImage, filename);
+            driveId = upload.location;
           }
           return resolve({
             meta: { province, regency, district, village, tps: tp },
@@ -158,8 +194,8 @@ const flushFolderImageC1 = async () => {
   }
 }
 
-const isUploadDrive = async () => {
-  return fs.existsSync(servicePath);
+const isUploadCloud = async () => {
+  return fs.existsSync(servicePath) || (process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== '');
 };
 
-module.exports = { downloadTpsC1, flushFolderImageC1, isUploadDrive };
+module.exports = { downloadTpsC1, flushFolderImageC1, isUploadCloud };

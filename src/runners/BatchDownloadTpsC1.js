@@ -3,7 +3,7 @@ const Throttle = require("../modules/Throttle");
 const {
   downloadTpsC1,
   flushFolderImageC1,
-  isUploadDrive,
+  isUploadCloud,
 } = require("../modules/download");
 const axios = require("axios");
 const UpdateTpsWithDownloadInformation = require("../repositories/UpdateTpsWithDownloadInformation");
@@ -23,16 +23,16 @@ const generateTpsUrl = (code) => {
 /**
  * @description This function load incomplete tps, check if any of the tps-es has uploaded c1 form, then store them into appropriate location
  * @param {number} count
+ * @param {number} offset
  * @param {string} provinsiCode
  * @param {string} kotaKabupatenCode
- * @param {number} offset
  * @returns {Promise<{ count: number, uploadResult: { result?: any} | { error?: Error} | null}>}
  */
 async function BatchDownloadTpsC1(
   count = 10,
+  offset = 0,
   provinsiCode = null,
-  kotaKabupatenCode = null,
-  offset = 0
+  kotaKabupatenCode = null
 ) {
   const list = await GetIncompleteTps(
     count,
@@ -67,7 +67,7 @@ async function BatchDownloadTpsC1(
           );
           console.log(
             "Finish updating region",
-            region,
+            region.id,
             "with c1Image",
             c1Image,
             "and driveId",
@@ -82,7 +82,7 @@ async function BatchDownloadTpsC1(
   await Promise.all(prList);
   let uploadResult = null;
   try {
-    const shouldUpload = await isUploadDrive();
+    const shouldUpload = await isUploadCloud();
     if (shouldUpload) await flushFolderImageC1();
     uploadResult = Either.Right(true);
   } catch (e) {
