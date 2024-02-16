@@ -3,7 +3,7 @@ const Throttle = require("../modules/Throttle");
 const {
   downloadTpsC1,
   flushFolderImageC1,
-  isUploadDrive,
+  isUploadCloud,
 } = require("../modules/download");
 const axios = require("axios");
 const UpdateTpsWithDownloadInformation = require("../repositories/UpdateTpsWithDownloadInformation");
@@ -82,7 +82,7 @@ async function BatchDownloadTpsC1(
   await Promise.all(prList);
   let uploadResult = null;
   try {
-    const shouldUpload = await isUploadDrive();
+    const shouldUpload = await isUploadCloud();
     if (shouldUpload) await flushFolderImageC1();
     uploadResult = Either.Right(true);
   } catch (e) {
