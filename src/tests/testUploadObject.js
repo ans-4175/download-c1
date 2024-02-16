@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require('fs');
 const path = require('path');
@@ -33,4 +35,4 @@ async function testUploadObject() {
     }
 }
   
-  testUploadObject();
+testUploadObject();
