@@ -199,7 +199,7 @@ const downloadTpsC1 = async (obj) => {
         }
       })
       .catch((error) => {
-        reject(null);
+        reject(error);
       });
   });
 };
