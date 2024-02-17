@@ -12,7 +12,7 @@ class ElapsedTime {
     return this.end - this.start;
   }
   toString() {
-    return `ElapsedTime(${value()} millis)`;
+    return `ElapsedTime(${this.value()} millis)`;
   }
 }
 
