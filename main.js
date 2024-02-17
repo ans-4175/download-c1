@@ -1,6 +1,6 @@
-const BatchDownloadTpsC1 = require("./src/runners/BatchDownloadTpsC1");
 const cron = require("node-cron");
 const { program } = require("commander");
+const BatchDownloadTpsC1 = require("./src/runners/BatchDownloadTpsC1");
 const IterativelyDownloadTpsC1 = require("./src/runners/IterativelyDownloadTpsC1");
 // UNCOMMENT if you want to run the cron job in long running
 // cron.schedule('*/5 * * * *', async () => {
@@ -29,7 +29,7 @@ const main = async () => {
   if (!iterative) {
     const count = 10000; // number of TPS to download per batch finding incomplete
     console.log("Begin performing download..");
-    await BatchDownloadTpsC1(count, provinceCode, kotaKabupatenCode);
+    await BatchDownloadTpsC1(count, 0, provinceCode, kotaKabupatenCode);
   } else {
     console.log("Begin performing download iteratively..");
     const result = await IterativelyDownloadTpsC1(
