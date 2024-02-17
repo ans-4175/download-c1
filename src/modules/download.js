@@ -15,13 +15,14 @@ const { file } = require("googleapis/build/src/apis/file");
 const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
 const FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
 
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
+const StopWatch = require("./StopWatch");
 const s3 = new AWS.S3({
-    endpoint: `${process.env.S3_ENDPOINT}/tps`,
-    credentials: {
-        accessKeyId: process.env.S3_KEYID,
-        secretAccessKey: process.env.S3_SECRETKEY,
-    },
+  endpoint: `${process.env.S3_ENDPOINT}/tps`,
+  credentials: {
+    accessKeyId: process.env.S3_KEYID,
+    secretAccessKey: process.env.S3_SECRETKEY,
+  },
 });
 
 class GoogleDriveService {
@@ -70,27 +71,27 @@ const uploadImageS3 = async (response, fileName, pathToSaveImage) => {
       Key: fileName, //here is your file name
     };
     if (pathToSaveImage) {
-      params.Body = fs.createReadStream(pathToSaveImage)
+      params.Body = fs.createReadStream(pathToSaveImage);
     } else {
       params.Body = response.data;
     }
 
     s3.upload(params, (s3Err, data) => {
-        if (s3Err) {
-            resolve({
-                success: false,
-                location: null,
-                error: s3Err,
-            });
-        } else {
-            resolve({
-                success: true,
-                location: data.Location,
-            });
-        }
+      if (s3Err) {
+        resolve({
+          success: false,
+          location: null,
+          error: s3Err,
+        });
+      } else {
+        resolve({
+          success: true,
+          location: data.Location,
+        });
+      }
     });
-  })
-}
+  });
+};
 const uploadImageDrive = async (response, pathToSaveImage, fileName) => {
   const media = {
     mimeType: "image/jpeg",
@@ -151,21 +152,21 @@ const downloadTpsC1 = async (obj) => {
     const village = tp.substring(0, 10);
     const filename = `${tp}.jpg`;
     // const filename = `${province}_${regency}_${district}_${village}_${tp}.jpg`;
-    const pathToSaveImage = path.join(
-      imageDirectory,
-      filename
-    );
+    const pathToSaveImage = path.join(imageDirectory, filename);
 
     // if (checkFile(filename)) return resolve({ meta: { province, regency, district, village, tps: tp }, filename, path: pathToSaveImage, driveId: null });
+    let start = StopWatch.start();
     axios({
       url,
       method: "GET",
       responseType: "stream",
     })
       .then(async (response) => {
+        console.log("Finish downloading image from", url, "in", start.stop());
         try {
           let driveId = null;
           let image = { path: null };
+          const start2 = StopWatch.start();
           if (isUploadCloud()) {
             // upload to cloud
             const upload = await uploadImageS3(response, filename);
@@ -174,6 +175,14 @@ const downloadTpsC1 = async (obj) => {
             // download to local
             image = await downloadImage(response, pathToSaveImage);
           }
+          console.log(
+            "Finish uploading image from",
+            url,
+            "to",
+            driveId || image,
+            "in",
+            start.stop()
+          );
           return resolve({
             meta: { province, regency, district, village, tps: tp },
             fileName: filename,
@@ -198,10 +207,10 @@ const flushFolderImageC1 = async () => {
     if (file === ".gitkeep") continue;
     await fs.unlinkSync(path.join(imageDirectory, file));
   }
-}
+};
 
 const isUploadCloud = async () => {
-  return (process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== '');
+  return process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== "";
   // return fs.existsSync(servicePath) || (process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== '');
 };
 
