@@ -63,13 +63,17 @@ const downloadImage = (response, pathToSaveImage) => {
   });
 };
 
-const uploadImageS3 = async (response, pathToSaveImage, fileName) => {
+const uploadImageS3 = async (response, fileName, pathToSaveImage) => {
   return new Promise((resolve) => {
     const params = {
       Bucket: process.env.S3_BUCKET, // pass your bucket name
       Key: fileName, //here is your file name
-      Body: fs.createReadStream(pathToSaveImage),
     };
+    if (pathToSaveImage) {
+      params.Body = fs.createReadStream(pathToSaveImage)
+    } else {
+      params.Body = response.data;
+    }
 
     s3.upload(params, (s3Err, data) => {
         if (s3Err) {
@@ -87,7 +91,7 @@ const uploadImageS3 = async (response, pathToSaveImage, fileName) => {
     });
   })
 }
-const uploadImage = async (response, pathToSaveImage, fileName) => {
+const uploadImageDrive = async (response, pathToSaveImage, fileName) => {
   const media = {
     mimeType: "image/jpeg",
     body: fs.createReadStream(pathToSaveImage),
@@ -160,13 +164,15 @@ const downloadTpsC1 = async (obj) => {
     })
       .then(async (response) => {
         try {
-          const image = await downloadImage(response, pathToSaveImage);
           let driveId = null;
+          let image = { path: null };
           if (isUploadCloud()) {
-            //test if need to upload to cloud
-            // driveId = await uploadImage(response, pathToSaveImage, filename);
-            const upload = await uploadImageS3(response, pathToSaveImage, filename);
+            // upload to cloud
+            const upload = await uploadImageS3(response, filename);
             driveId = upload.location;
+          } else {
+            // download to local
+            image = await downloadImage(response, pathToSaveImage);
           }
           return resolve({
             meta: { province, regency, district, village, tps: tp },
@@ -195,7 +201,8 @@ const flushFolderImageC1 = async () => {
 }
 
 const isUploadCloud = async () => {
-  return fs.existsSync(servicePath) || (process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== '');
+  return (process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== '');
+  // return fs.existsSync(servicePath) || (process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== '');
 };
 
 module.exports = { downloadTpsC1, flushFolderImageC1, isUploadCloud };

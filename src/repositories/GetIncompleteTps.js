@@ -27,7 +27,7 @@ async function GetIncompleteTps(
   }
   let realOffset = offset || 0;
   const query = `SELECT * FROM tps_c1_download_result WHERE ${whereStatement} LIMIT ${count} OFFSET ${realOffset}`;
-  console.log(query, parameter);
+  // console.log(query, parameter);
   const list = await db.all(query, parameter);
   return list;
 }
