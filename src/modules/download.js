@@ -186,7 +186,7 @@ const downloadTpsC1 = async (obj) => {
             "to",
             driveId || image,
             "in",
-            `${start.stop()}`
+            `${start2.stop()}`
           );
           return resolve({
             meta: { province, regency, district, village, tps: tp },
