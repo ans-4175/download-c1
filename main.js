@@ -14,7 +14,7 @@ program.option(
 );
 program.option("--province-code [string...]", "Province code to scrape, if any");
 program.option(
-  "--kota-kabupaten-code [string]",
+  "--kota-kabupaten-code [string...]",
   "Kota kabupated code to scrape, if any"
 );
 

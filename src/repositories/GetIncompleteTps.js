@@ -16,16 +16,16 @@ async function GetIncompleteTps(
 ) {
   const db = await isReady;
   let whereStatement = `fileName IS NULL`;
-  let parameter = {};
-  if (provinsiCode.length) {
-    // const placeholders = provinsiCode.map(() => '?').join(', ');
-    whereStatement += ` AND provinsiCode IN (${provinsiCode.join(', ')})`;
-    // whereStatement += ` AND provinsiCode IN ($provinsiCode)`;
-    // parameter["$provinsiCode"] = provinsiCode.join(', ');
+  let parameter = [];
+  if (provinsiCode?.length) {
+    const provincePlaceholders = provinsiCode.map(() => '?').join(', ');
+    whereStatement += ` AND provinsiCode IN (${provincePlaceholders})`;
+    parameter.push(...provinsiCode);
   }
-  if (kotaKabupatenCode) {
-    whereStatement += ` AND kotaKabupatenCode = $kotaKabupatenCode`;
-    parameter["$kotaKabupatenCode"] = kotaKabupatenCode;
+  if (kotaKabupatenCode?.length) {
+    const kotkabPlaceholders = kotaKabupatenCode.map(() => '?').join(', ');
+    whereStatement += ` AND kotaKabupatenCode IN (${kotkabPlaceholders})`;
+    parameter.push(...kotaKabupatenCode);
   }
   let realOffset = offset || 0;
   const query = `SELECT * FROM tps_c1_download_result WHERE ${whereStatement} LIMIT ${count} OFFSET ${realOffset}`;
