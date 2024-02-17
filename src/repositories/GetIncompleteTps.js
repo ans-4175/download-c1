@@ -17,9 +17,11 @@ async function GetIncompleteTps(
   const db = await isReady;
   let whereStatement = `fileName IS NULL`;
   let parameter = {};
-  if (provinsiCode) {
-    whereStatement += ` AND provinsiCode = $provinsiCode`;
-    parameter["$provinsiCode"] = provinsiCode;
+  if (provinsiCode.length) {
+    // const placeholders = provinsiCode.map(() => '?').join(', ');
+    whereStatement += ` AND provinsiCode IN (${provinsiCode.join(', ')})`;
+    // whereStatement += ` AND provinsiCode IN ($provinsiCode)`;
+    // parameter["$provinsiCode"] = provinsiCode.join(', ');
   }
   if (kotaKabupatenCode) {
     whereStatement += ` AND kotaKabupatenCode = $kotaKabupatenCode`;

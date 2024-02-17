@@ -12,7 +12,7 @@ program.option(
   "--iterative",
   "Perform scraping from start to finish using pagination by incomplete tps"
 );
-program.option("--province-code [string]", "Province code to scrape, if any");
+program.option("--province-code [string...]", "Province code to scrape, if any");
 program.option(
   "--kota-kabupaten-code [string]",
   "Kota kabupated code to scrape, if any"
