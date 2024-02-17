@@ -53,12 +53,17 @@ async function BatchDownloadTpsC1(
         const c1Image = images[1];
         console.log("Finish fetching c1Image with uri", c1Image);
         if (c1Image) {
+          let start = new Date();
           const result = await downloadTpsC1({ code: tpsCode, url: c1Image });
           console.log(
-            "Finish downloading and uploading to gdrive for c1Image",
-            c1Image
+            "Finish downloading and uploading to remote storage for c1Image",
+            c1Image,
+            "in",
+            new Date().getTime() - start.getTime(),
+            "millis"
           );
           const { fileName, path, driveId } = result;
+          start = new Date();
           const updateResult = await UpdateTpsWithDownloadInformation(
             regionId,
             c1Image,
@@ -70,8 +75,11 @@ async function BatchDownloadTpsC1(
             region.id,
             "with c1Image",
             c1Image,
-            "and driveId",
-            driveId
+            "and remote identifier",
+            driveId,
+            "in",
+            new Date().getTime() - start.getTime(),
+            "millis"
           );
         }
       } catch (e) {
