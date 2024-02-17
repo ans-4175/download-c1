@@ -162,7 +162,12 @@ const downloadTpsC1 = async (obj) => {
       responseType: "stream",
     })
       .then(async (response) => {
-        console.log("Finish downloading image from", url, "in", start.stop());
+        console.log(
+          "Finish downloading image from",
+          url,
+          "in",
+          `${start.stop()}`
+        );
         try {
           let driveId = null;
           let image = { path: null };
@@ -181,7 +186,7 @@ const downloadTpsC1 = async (obj) => {
             "to",
             driveId || image,
             "in",
-            start.stop()
+            `${start.stop()}`
           );
           return resolve({
             meta: { province, regency, district, village, tps: tp },
