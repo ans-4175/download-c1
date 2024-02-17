@@ -1,6 +1,6 @@
-const BatchDownloadTpsC1 = require("./src/runners/BatchDownloadTpsC1");
 const cron = require("node-cron");
 const { program } = require("commander");
+const BatchDownloadTpsC1 = require("./src/runners/BatchDownloadTpsC1");
 const IterativelyDownloadTpsC1 = require("./src/runners/IterativelyDownloadTpsC1");
 // UNCOMMENT if you want to run the cron job in long running
 // cron.schedule('*/5 * * * *', async () => {
