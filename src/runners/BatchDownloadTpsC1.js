@@ -1,5 +1,6 @@
 const GetIncompleteTps = require("../repositories/GetIncompleteTps");
 const Throttle = require("../modules/Throttle");
+const Sleep = require("../modules/Sleep");
 const {
   downloadTpsC1,
   flushFolderImageC1,
@@ -42,6 +43,7 @@ async function BatchDownloadTpsC1(
   );
   const throttler = new Throttle(20);
   console.log("Found", list.length, "incomplete tps!");
+  let progress = 0;
   const prList = list.map(async (region) => {
     return await throttler.offer(async () => {
       try {
@@ -83,8 +85,11 @@ async function BatchDownloadTpsC1(
           );
         }
       } catch (e) {
-        console.log("Error on fetching tps c1 image", region, e);
+        console.log("Error on fetching tps c1 image", region.id, e);
       }
+      progress += 1;
+      console.log("BatchDownloadTpsC1 progress", progress, "/", count);
+      await Sleep();
     });
   });
   await Promise.all(prList);
