@@ -89,7 +89,7 @@ async function BatchDownloadTpsC1(
       }
       progress += 1;
       console.log("BatchDownloadTpsC1 progress", progress, "/", count);
-      await Sleep();
+      await Sleep.withRandomTime(5000);
     });
   });
   await Promise.all(prList);
