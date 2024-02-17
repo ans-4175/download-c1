@@ -32,7 +32,7 @@ class GoogleDriveService {
         let fileId = null;
         try {
             const res = await this.driveClient.files.list({
-                q: `name='${fileName}' and '${FOLDER_ID}' in parents`,
+                q: `name='${fileName}' and '${folderId}' in parents`,
                 fields: "files(id, name)",
             });
         
@@ -49,7 +49,7 @@ class GoogleDriveService {
                     requestBody: {
                         name: fileName,
                         mimeType: "image/jpeg",
-                        parents: [FOLDER_ID],
+                        parents: [folderId],
                     },
                     media: media,
                 });
