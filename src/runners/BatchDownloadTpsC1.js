@@ -2,10 +2,10 @@ const GetIncompleteTps = require("../repositories/GetIncompleteTps");
 const Throttle = require("../modules/Throttle");
 const Sleep = require("../modules/Sleep");
 const {
-  downloadTpsC1,
-  flushFolderImageC1,
+  downloadC1,
+  flushFolderC1,
   isUploadCloud,
-} = require("../modules/download");
+} = require("../services/DownloadTPS");
 const axios = require("axios");
 const UpdateTpsWithDownloadInformation = require("../repositories/UpdateTpsWithDownloadInformation");
 const Either = require("../modules/Either");
@@ -29,7 +29,7 @@ const generateTpsUrl = (code) => {
  * @param {string} kotaKabupatenCode
  * @returns {Promise<{ count: number, uploadResult: { result?: any} | { error?: Error} | null}>}
  */
-async function BatchDownloadTpsC1(
+async function BatchDownloadC1(
   count = 10,
   offset = 0,
   provinsiCode = null,
@@ -56,7 +56,7 @@ async function BatchDownloadTpsC1(
         console.log("Finish fetching c1Image with uri", c1Image);
         if (c1Image) {
           let start = new Date();
-          const result = await downloadTpsC1({ code: tpsCode, url: c1Image });
+          const result = await downloadC1({ code: tpsCode, url: c1Image });
           console.log(
             "Finish downloading and uploading to remote storage for c1Image",
             c1Image,
@@ -88,7 +88,7 @@ async function BatchDownloadTpsC1(
         console.log("Error on fetching tps c1 image", region.id, e);
       }
       progress += 1;
-      console.log("BatchDownloadTpsC1 progress", progress, "/", count);
+      console.log("BatchDownloadC1 progress", progress, "/", count);
       await Sleep.withRandomTime(5000);
     });
   });
@@ -96,7 +96,7 @@ async function BatchDownloadTpsC1(
   let uploadResult = null;
   try {
     const shouldUpload = await isUploadCloud();
-    if (shouldUpload) await flushFolderImageC1();
+    if (shouldUpload) await flushFolderC1();
     uploadResult = Either.Right(true);
   } catch (e) {
     uploadResult = Either.Left(e);
@@ -108,4 +108,4 @@ async function BatchDownloadTpsC1(
   };
 }
 
-module.exports = BatchDownloadTpsC1;
+module.exports = BatchDownloadC1;

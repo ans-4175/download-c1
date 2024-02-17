@@ -18,7 +18,7 @@ class S3Service {
       return this.s3;
     }
   
-    async uploadS3 (bucket, uploadPath, { streamFile, pathFile }) {
+    async upload(bucket, uploadPath, { streamFile, pathFile }) {
         return new Promise((resolve) => {
             const params = {
               Bucket: bucket, // pass your bucket name
@@ -30,7 +30,7 @@ class S3Service {
               params.Body = streamFile;
             }
         
-            s3.upload(params, (s3Err, data) => {
+            this.s3.upload(params, (s3Err, data) => {
               if (s3Err) {
                 resolve({
                   success: false,

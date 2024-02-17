@@ -3,7 +3,7 @@ require("dotenv").config();
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-const StopWatch = require("./StopWatch");
+const StopWatch = require("./../modules/StopWatch");
 const imageDirectory = path.resolve(
   __dirname,
   "..",
@@ -12,19 +12,19 @@ const imageDirectory = path.resolve(
 );
 
 // setup S3
-const S3Service = require("./S3Service");
+const S3Service = require("./../modules/S3Service");
 const s3Client = new S3Service(process.env.S3_ENDPOINT, process.env.S3_KEYID, process.env.S3_SECRETKEY);
 const bucket = process.env.S3_BUCKET;
 
 // setup GDrive
-const GoogleDriveService = require("./GoogleDrive");
-const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
-const FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
-const driveService = new GoogleDriveService(servicePath, [
-  "https://www.googleapis.com/auth/drive",
-]);
+// const GoogleDriveService = require("./GoogleDrive");
+// const servicePath = path.resolve(__dirname, "..", "..", "service-account.json");
+// const FOLDER_ID = process.env.GDRIVE_FOLDER_ID;
+// const driveService = new GoogleDriveService(servicePath, [
+//   "https://www.googleapis.com/auth/drive",
+// ]);
 
-const downloadImageToLocal = (stream, pathToSaveImage) => {
+const downloadToLocal = (stream, pathToSaveImage) => {
   return new Promise((resolve, reject) => {
     const fileStream = fs.createWriteStream(pathToSaveImage);
     const image = stream.pipe(fileStream);
@@ -38,7 +38,7 @@ const downloadImageToLocal = (stream, pathToSaveImage) => {
  * @param {{code: string, url: string }} obj
  * @returns {Promise<{meta: { province: string, regency: string, district: string, village: string, tps: string }, fileName: string, path: string, driveId: string }>}
  */
-const downloadTpsC1 = async (obj) => {
+const downloadC1 = async (obj) => {
   const { code: tp, url } = obj;
   console.log(obj);
   return new Promise((resolve, reject) => {
@@ -72,11 +72,11 @@ const downloadTpsC1 = async (obj) => {
           const sw_upload = StopWatch.start();
           if (isUploadCloud()) {
             // upload to cloud
-            const upload = await s3Client.uploadImageS3(bucket, `tps/${filename}`, { streamFile: response.data });
+            const upload = await s3Client.upload(bucket, `tps/${filename}`, { streamFile: response.data });
             driveId = upload.location;
           } else {
             // download to local
-            image = await downloadImageToLocal(response.data, pathToSaveImage);
+            image = await downloadToLocal(response.data, pathToSaveImage);
           }
           console.log(
             "Finish uploading image from",
@@ -102,7 +102,7 @@ const downloadTpsC1 = async (obj) => {
   });
 };
 
-const flushFolderImageC1 = async () => {
+const flushFolderC1 = async () => {
   // Read the directory
   const files = await fs.readdirSync(imageDirectory);
   // Delete each file
@@ -117,4 +117,4 @@ const isUploadCloud = async () => {
   // return fs.existsSync(servicePath) || (process.env.S3_SECRETKEY && process.env.S3_SECRETKEY.trim() !== '');
 };
 
-module.exports = { downloadTpsC1, flushFolderImageC1, isUploadCloud };
+module.exports = { downloadC1, flushFolderC1, isUploadCloud };

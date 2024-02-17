@@ -18,7 +18,7 @@ class GoogleDriveService {
     return this.driveClient;
   }
 
-    async uploadImageDrive({ fileName, folderId }, { streamFile, pathFile }) {
+    async uploadImage({ fileName, folderId }, { streamFile, pathFile }) {
         const media = {
             mimeType: "image/jpeg",
         };
