@@ -40,7 +40,7 @@ async function BatchDownloadTpsC1(
     provinsiCode,
     kotaKabupatenCode
   );
-  const throttler = new Throttle(100);
+  const throttler = new Throttle(20);
   console.log("Found", list.length, "incomplete tps!");
   const prList = list.map(async (region) => {
     return await throttler.offer(async () => {
